@@ -1,0 +1,20 @@
+<!-- <ul class="nav nav-pills justify-content-center" *ngIf="hasHits">
+    <li class="nav-item">
+        <a class="nav-link" [class.active]="!moduleLang || moduleLang ===''" data-toggle="pill" href="#" (click)="selectLanguage('')">
+            All
+        </a>
+    </li>
+    <li class="nav-item" *ngFor="let lang of globals.supportedLanguages; let i = index">
+        <a class="nav-link" [class.active]="moduleLang === globals.supportedLanguages[i]" data-toggle="pill" href="#" (click)="selectLanguage(lang)">
+            <span title="{{ globals.languageNames[i] }}">{{ globals.supportedLanguages[i] }}</span>
+        </a>
+    </li>
+</ul> -->
+<select class="form-select" aria-label="Language selector" *ngIf="hasHits">
+    <option selected value="" (click)="selectLanguage('')">All languages</option>
+    <option *ngFor="let lang of globals.supportedLanguages; let i = index" 
+    value="{{ globals.supportedLanguages[i] }}"
+    (click)="selectLanguage(lang)">
+        {{ globals.languageNames[i] }}
+    </option>
+</select>

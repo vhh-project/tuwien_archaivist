@@ -1,0 +1,18 @@
+<div class="image-container" (resized)="onResize($event)" (mouseup)="onMouseUp($event)" (mousedown)="onMouseDown($event)">
+    <img #docImage class="img-fluid selectAndDragDisable" draggable=false
+    [src]="vespaService.getDocumentPageImageURL(docName!, docPage!)" 
+    (load)="onDocImageLoad()"/>
+    <div class="bounding-box" title="{{box.word}}" *ngFor="let box of flatBoundingBoxes, let i = index" 
+    [class.relevant] = "terms?.includes(box.word)"
+    [style.position]="'absolute'"
+    [style.left]="getScaledXPos(box.box[0]) + getLeftOffset() + 'px'"
+    [style.bottom]="getScaledYPos(box.box[2]) + 'px'"
+    [style.width]="getScaledXPos(box.box[1] - box.box[0]) + 'px'"
+    [style.height]="getScaledYPos(box.box[3] - box.box[2]) + 'px'">
+        <div [fittext] [resize]="resize" appFitTextPlus>{{ box.word }}</div>
+    </div>
+</div>
+<div #tooltipDiv class="tooltip-div">
+    <i class="fa fa-search mx-1" (click)="onTooltipSearch()"></i>
+    <i class="fa fa-copy mx-1" (click)="onTooltipCopy()"></i>
+</div>

@@ -1,0 +1,111 @@
+
+<div class="container-fluid">
+    <div class="row top-row">
+        <div class='col-2 offset-1 title-container'>
+            <h3 class="title">{{ title }}</h3>
+        </div>
+        <div class="col top-container mb-2">    
+            <div class="mid-container">
+                <div class="p-1 bg-light rounded rounded-pill shadow-sm">
+                    <div class="input-group">
+                        <!-- <div class="btn btn-link" *ngIf="router.url.includes('document')" [routerLink]="'../../'">
+                            <i class="fa fa-arrow-left"></i>
+                        </div> -->
+                        <input id="search-bar" type="search" [(ngModel)]="searchText" placeholder="Search for a specific concept (in any language)" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                        <div class="input-group-append">
+                            <div id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group ml-2 mode-group" role="group" aria-label="Basic outlined example" *ngIf="modules.length > 0">
+                <button type="button" class="btn group-btn-highlight" [class.active]="multiModules" (click)="multiModules = true">Explore</button>
+                <button type="button" class="btn group-btn-highlight" [class.active]="!multiModules" (click)="multiModules = false">Focus</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 pl-3 side-nav pr-0">
+            <div class="history">
+                <h4>History</h4>
+                <div *ngIf="modules.length === 0">
+                    Start searching to fill your history!
+                </div>
+                <div class="history-item row" *ngFor="let data of modules; let i = index" [class.active]="modulesInViewPort[i]" (click)="onHistoryClick(i)">
+                    <div class="col-1 d-flex justify-content-center align-items-center">
+                        <i class="fa" [ngClass]="data.getHistoryIconClass()"></i>
+                    </div>
+                    <div class="col pl-0">
+                        {{ data.getHistoryText() }} 
+                    </div>
+                    <div class="col-1 d-flex justify-content-center align-items-center" (click)="onCloseHistoryItem(i, $event)">
+                        <i class="fa fa-close"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="v-divider"></div> 
+        </div>
+        <div class="col v-main pl-0">
+            <div class="h-container">
+                <!-- <div class="pad-item pad-item-left"></div> -->
+                <div *ngFor="let data of modules; let i = index" class="item" id="item-{{i}}" appModuleItem
+                [class.full-page] = "!multiModules"
+                snInViewport
+                (inViewportChange)="onInViewportChange(i, $event)"
+                [inViewportOptions]="{
+                    rootMargin: '0px 0px 0px 17%'
+                }">
+                    <div *ngIf="data.type == moduleType.Search" class="d-flex flex-column w-100">
+                        <div class="result-header">
+                            <div class="d-flex justify-content-center">
+                                <div class="justify-content-start">
+                                    <p class="mb-0 mt-2">Results for '{{ modules[i]?.query }}'</p>
+                                    <p *ngIf="hasHits(i)" class="mb-0 text-muted ">{{ modules[i]?.result?.total }} entries found! ({{ modules[i]?.result?.hits?.length }} loaded)</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center mt-2">
+                                <app-language-filter
+                                [hasHits]="hasHits(i)"
+                                [moduleLang]="modules[i].language"
+                                (languageSelected)="onLanguageFilter($event, i)"
+                                ></app-language-filter>
+                                <div class="btn-group ml-2 mode-group" role="group" aria-label="Basic outlined example" *ngIf="modules.length > 0">
+                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 0" (click)="sort = 0">
+                                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 1" (click)="sort = 1">
+                                        <i class="fa fa-sort-amount-desc" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 2" (click)="sort = 2">
+                                        <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 3" (click)="sort = 3">
+                                        <i class="fa fa-sort-alpha-desc" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <app-search-results class="result-body" 
+                        (termsSelected)="onTermsSelected($event, modules[i]?.language!)"
+                        (resultItemClicked)="onResultItemClicked($event, i)"
+                        [data]="data"
+                        [inViewport]="modulesInViewPort[i]"
+                        (scrolled)="onScroll(i)"></app-search-results>
+                    </div>
+                    <div *ngIf="data.type == moduleType.Document" style="width: 100%;">
+                        <app-document-detail class="mt-2"
+                        (termsSelected)="onTermsSelected($event, modules[i]?.language!)"
+                        [data]="$any(data)"
+                        [inViewport]="modulesInViewPort[i]"
+                        ></app-document-detail>
+                    </div>
+                </div>
+                <!-- <div class="pad-item pad-item-right"></div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
+
+

@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+$flag-icon-css-path: '~flag-icon-css/flags' !default;
+@import "~flag-icon-css/sass/flag-icon";
+
+.doc-card {
+    // width: 40rem; 
+    cursor: pointer;
+    border: none;
+    border: 1px solid white;
+}
+
+.doc-card:hover {
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .5rem
+}
+
+.doc-card-small {
+    cursor: pointer;
+    border: none;
+}
+
+.doc-card-small:hover {
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .5rem
+}
+
+.carousel-nav-icon {
+    height: 48px;
+    width: 48px; 
+}
+
+.carousel-item .col, .carousel-item .col-sm, .carousel-item .col-md {
+    margin: 8px;
+    background-size: cover;
+    background-position: center center; 
+}
+
+.carousel-item .text-muted{
+    margin-top: 4px;
+}
+
+.carousel-item .card{
+    cursor: pointer;
+    border: none;
+}
+
+.carousel-item .card.active{
+    border: 2px solid rgba(0,0,0,.4);
+    border-radius: .5rem
+}
+
+.carousel-item .card:hover {
+    border: 2px solid rgba(0,0,0,.125);
+    border-radius: .5rem
+}
+
+.modal-lg {
+    max-width: 75% !important;
+}
+
+.nav-item img { 
+    filter: opacity(50%);
+}
+
+.nav-item:hover img {
+    filter: opacity(100%);
+}
+
+.nav-item:hover a {
+    color: inherit;
+}
+
+.nav-item a {
+    text-decoration: none !important;
+    color: #A0A0A0;
+}
+
+.nav-item.active {
+    font-weight: bold;
+}
+
+.nav-item.active img{
+    filter: opacity(100%);
+}
+
+.nav-item.active a{
+    color: inherit;
+}
+
+hi {
+    font-weight: bold;
+}
+
+.w-60 {
+    width: 60%;
+}

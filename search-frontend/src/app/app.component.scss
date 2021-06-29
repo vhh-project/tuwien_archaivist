@@ -1,0 +1,150 @@
+.v-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100vh - 100px);
+} 
+
+.h-main {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100vw;
+    height: 100vh;
+}
+
+.h-divider{
+    margin-top:5px;
+    margin-bottom:5px;
+    height:1px;
+    width:100%;
+    border-top:1px solid lightgray;
+}
+
+.top-row {
+    height: 100px;
+}
+
+.v-divider {
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 98%;
+    width: 1px;
+    border-right: 2px solid lightgray;
+}
+
+.title-container {
+    display: flex;
+    width: 30%;
+    justify-content: flex-end;
+    padding-right: 15px;
+    align-items: center;
+}
+
+.mid-container {
+    width: 40%;
+}
+
+.top-container {
+    width: 80%;
+    display: flex;
+    align-items: center;
+}
+
+.result-header {
+    background-color: white;
+    height: 100px;
+
+    p {
+        text-align: center;
+    }
+}
+
+.result-body {
+    overflow-y: auto;
+}
+
+.side-nav {
+    display: flex;
+    flex-direction: row;
+
+    .history {
+        flex-grow: 1;
+    }
+
+    .history-item {
+        cursor: pointer;
+        border-radius: .3rem;
+        border: 1px solid white;
+        margin-left: 0;
+        margin-right: 0;
+
+        &.active {
+            // background-color: rgb(64, 224, 208, 0.5);
+            // background-color: rgba(151, 204, 220, 1.0);
+            background-color: rgba(243, 154, 39, 0.5);
+
+        }
+        &:hover {
+            border: 1px solid rgba(0,0,0,.125);
+        }
+    }
+}
+
+.h-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    .item {
+        display: flex;
+        scroll-snap-align: start;
+        scrollbar-width: thin;
+        flex: 0 0 auto;
+        width: 30%;
+
+        margin-left: auto;
+        margin-right: auto;
+        & ~ .item {
+            margin-left: 5%; 
+        }        
+
+        justify-content: center;
+        overflow-y: auto;
+
+        &.sn-viewport--out {
+            opacity: 0.5;
+        }
+
+        &.full-page {
+            scroll-snap-align: center;
+            width: 100%;
+        }
+    }
+
+    .pad-item {
+        flex: 1 0 30%;
+    }
+}
+
+.group-btn-highlight {
+    border-color: rgba(243, 154, 39, 0.5);
+    color:rgba(243, 154, 39, 0.8);
+
+    &.active {
+        color: #fff;
+        background-color: rgba(243, 154, 39, 0.5);
+    }
+}
+
+.sort-btn {
+    padding: 0.25rem 0.3rem;
+    line-height: 1;
+}
