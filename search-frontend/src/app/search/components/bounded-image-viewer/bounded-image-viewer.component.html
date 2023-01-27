@@ -1,0 +1,6 @@
+<div class="image-container" (resized)="onResize($event)">
+    <img #docImage class="img-fluid selectAndDragDisable" draggable=false
+    [src]="vespaService.getDocumentPageImageURL(docName!, docPage!)" 
+    (load)="onDocImageLoad()"/>
+    <div [resize]="resize" [innerHtml]="boundingBoxContent | safeHtml" appFitTextPlus></div>
+</div>

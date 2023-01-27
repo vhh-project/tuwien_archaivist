@@ -1,0 +1,7 @@
+<div class="stem-container">
+<ng-container *ngFor="let stemFilter of stemFilters">
+    <ng-container *ngIf="language == '' || language == stemFilter.getLanguage()">
+        <span class="badge" *ngFor="let stem of stemFilter.getStems(); let i = index"><del>{{stem}}</del> ({{stemFilter.getLanguage()}})<i title="Clear this filter term"  (click)="removeStemFilter(stemFilter.getLanguage(), i)" class="fa fa-close"></i></span>
+    </ng-container>
+</ng-container>
+</div>

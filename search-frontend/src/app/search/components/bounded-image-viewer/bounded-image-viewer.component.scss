@@ -1,0 +1,88 @@
+$select-color: rgba(0, 254, 45, 0.3);
+$select-color-strong: rgba(0, 254, 45, 0.5);
+
+$highlight-color: rgba(243, 154, 39, 0.3);
+$highlight-color-strong: rgba(243, 154, 39, 0.9);
+
+$synonym-color: rgba(12, 101, 216, 0.3);
+$synonym-color-strong: rgba(12, 101, 216, 0.9);
+
+// $highlight-color: rgba(0, 254, 255, 0.5);
+
+
+
+.selectAndDragDisable {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
+}
+
+.synonym {
+    background-color: $synonym-color;
+    border: 1px solid  $synonym-color-strong;
+}
+
+.relevant {
+    background-color: $highlight-color;
+    border: 1px solid  $highlight-color-strong;
+}
+
+.selected {
+    background-color: $select-color;
+}
+
+.bounding-box {
+    ::-moz-selection { /* Code for Firefox */
+    background: transparent;
+  }
+}
+  
+.bounding-box {
+    ::selection {
+    background: transparent;
+  }
+}
+
+.bounding-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: transparent;
+}
+
+.bounding-box:hover {
+    border: 1px solid $select-color-strong;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+
+    .img-fluid {
+        width: 100%;
+    }
+}
+
+.bounding-container {
+    .img-fluid {
+        width: 100%;
+    }
+}
+
+.tooltip-div {
+    display: none;
+    // width: 250px;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #666;
+    padding: 5px;
+    border-radius: 5px 5px 5px 5px;
+}

@@ -1,0 +1,64 @@
+<div *ngIf="hasHits()">
+    <div class="d-flex justify-content-center" (mouseup)="onMouseUp($event)" (mousedown)="onMouseDown($event)">
+        <virtual-scroller #scroll class="scroll-viewport"
+        [items]="data!.result!.hits" 
+        [enableUnequalChildrenSizes]="true" 
+        [class.stem-filtered]="data.hasStemFilters()" 
+        (vsEnd)="fetchMore($event)">
+            <div *ngFor="let item of scroll.viewPortItems">
+                <div class="card doc-card mb-1" (click)="onClick($event, item)">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <div class="d-flex justify-content-start align-items-center">
+                                <div class="doc-detail-mid">
+                                    <span class="doc-title" [class.switchable]="!switched" title="{{ item.fields!.parent_doc }}"
+                                    (click)="onTitleClick($event, item.fields)">
+                                        {{ item.fields!.parent_doc }}
+                                    </span>
+                                    <!-- <span class="doc-page" title="{{ item.fields!.parent_doc }} | Page {{ item.fields!.page + 1 }}">
+                                        &nbsp;| Page {{ item.fields!.page + 1}}
+                                    </span> -->
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span *ngIf="item.fields!.language" title="{{ globals.languageCodeToName(item.fields!.language) }}" class="shadow border rounded px-1 language-tag">{{ item.fields!.language }}</span>
+                                    <span class="doc-page">{{ item.fields!.collection }} | Page {{ item.fields!.page + 1 }}</span>
+                                </div>
+                                <div>
+                                    <a href="{{vespaService.downloadDocumentFileURL(item.fields!.parent_doc)}}" class="btn btn-title" (click)="onDownloadClick($event, item.fields)" title="Download document">
+                                        <i class="fa fa-download" ></i>
+                                    </a>
+                                    <a class="btn btn-title" (click)="onSnippetSummaryClick($event, item.fields)" title="Copy snippet summary to clipboard">
+                                        <i class="fa fa-copy" ></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <h6 class="card-subtitle mb-2 text-muted">Metadata: country of origin, date issued</h6> -->
+                        <!-- <p class="card-text" [innerHTML]="item.fields!.body | safeHtml"></p> -->
+                        <div *ngFor="let snippetName of getSnippets(item.fields.parent_doc, item.fields.page)?.names, let i = index">
+                            <app-bounded-snippet-viewer 
+                            [snippetName]="snippetName"
+                            [snippetBox]="getSnippets(item.fields.parent_doc, item.fields.page).boxes[i]"
+                            [boundingData]="getBoundingBoxes(item.fields.parent_doc, item.fields.page)"
+                            [metaData]="data.result.queryMetadata"
+                            [stemFilters]="data.getLanguageStemFilters(item.fields.language)"
+                            [docName]="item.fields.parent_doc"
+                            [docPage]="item.fields.page"
+                            [inViewport]="inViewport"
+                            [language]="item.fields.language"
+                            ></app-bounded-snippet-viewer>
+                            <div class="h-divider-wrapper">
+                                <div *ngIf="i < getSnippets(item.fields.parent_doc, item.fields.page)?.names.length - 1" class="h-divider"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </virtual-scroller>
+    </div>
+</div>
+<div *ngIf="!data?.result">
+    <!-- <p>Waiting for your input!</p> -->
+</div>

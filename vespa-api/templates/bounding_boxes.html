@@ -1,0 +1,18 @@
+{% for box in boxes %}
+    <div
+        title="{{ get_word_title(box['word'], stems, terms, synonym_positions[loop.index0], mainterm_map)}}"
+        class="bounding-box {{ 'relevant' if box['word'] in terms else '' }} {{ 'synonym' if loop.index0 in synonym_positions else '' }}"
+        style="
+            position: absolute;
+            left: {{ box['box'][0] / width * 100 }}%;
+            bottom: {{ box['box'][2] / height * 100 }}%;
+            width: {{ (box['box'][1] - box['box'][0]) / width * 100 }}%;
+            height: {{ (box['box'][3] - box['box'][2]) / height * 100 }}%;
+        "
+        {% if box['word'] in terms %}
+            stem="{{ terms[box['word']] }}"
+        {% endif %}
+    >
+        <div class="fittext-target">{{ box['word'] }}</div>
+    </div>
+{% endfor %}

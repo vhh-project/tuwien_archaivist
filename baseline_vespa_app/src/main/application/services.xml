@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services version="1.0">
+    <container id="baseline_container" version="1.0">
+        <search>
+            <chain id="multilangchain" inherits="vespa">
+                <searcher id="baseline.MultilangSearcher" bundle="baseline" after="MinimalQueryInserter">
+                </searcher>
+                <searcher id="baseline.StemFilterSearcher" bundle="baseline" after="MultilangSearcher">
+                </searcher>
+            </chain>
+            <renderer id="query-meta-json" class="baseline.QueryMetadataJsonRenderer" bundle="baseline" />
+    	</search>
+        <document-api></document-api>
+        <component id="baseline.service.Word2WordTranslator" bundle="baseline" />
+    </container>
+    <content id="baseline_content" version="1.0">
+        <redundancy reply-after="1">1</redundancy>
+        <documents>
+            <document type="baseline" mode="index"></document>
+        </documents>
+        <nodes>
+            <node distribution-key="0" hostalias="node1"></node>
+        </nodes>
+        <tuning>
+            <resource-limits>
+                <disk>0.90</disk>
+            </resource-limits>
+        </tuning>
+        <engine>
+            <proton>
+                <resource-limits>
+                    <disk>0.95</disk>
+                </resource-limits>
+            </proton>
+        </engine>
+    </content>
+</services>

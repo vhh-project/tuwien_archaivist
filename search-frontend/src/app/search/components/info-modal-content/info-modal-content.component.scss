@@ -1,0 +1,58 @@
+table tr {
+    td {
+   
+        &:first-of-type {
+            width: 50px;
+            border-right: 1px solid lightgrey;
+            font-weight: 300;
+        }
+
+        & ~ td span {
+            text-decoration-style: dotted;
+            text-decoration-line: underline;
+        }  
+    }   
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-scroll {
+    width: calc(500px - 16 - 16);
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px 15px;
+    justify-items: center;
+    align-items: center;
+}
+
+.grid-item {
+    text-align: center;
+}
+
+:host ::ng-deep .synonym-popover {
+    max-width: 33vw;
+    line-height: 1.0;
+
+    .popover-body {
+        overflow-y: auto;
+        max-height: 33vw;
+    }
+}
+
+.synonym-mainterm {
+    text-decoration-style: dotted;
+    text-decoration-line: underline;
+}  

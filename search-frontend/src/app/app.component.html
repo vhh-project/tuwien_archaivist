@@ -1,8 +1,11 @@
 
-<div class="container-fluid">
+<div class="container-fluid" (click)="containerClick()">
     <div class="row top-row">
-        <div class='col-2 offset-1 title-container'>
-            <h3 class="title">{{ title }}</h3>
+        <div class='col-1 offset-1 logo-container'>
+            <img class="tu-logo" src="assets/tu_schwarz.gif"/>
+        </div>
+        <div class='col-1 title-container'>
+            <h3 class="title">Arch<b>AI</b>vist</h3>
         </div>
         <div class="col top-container mb-2">    
             <div class="mid-container">
@@ -19,11 +22,12 @@
                 </div>
             </div>
             <div class="btn-group ml-2 mode-group" role="group" aria-label="Basic outlined example" *ngIf="modules.length > 0">
-                <button type="button" class="btn group-btn-highlight" [class.active]="multiModules" (click)="multiModules = true">Explore</button>
-                <button type="button" class="btn group-btn-highlight" [class.active]="!multiModules" (click)="multiModules = false">Focus</button>
+                <button type="button" class="btn group-btn-highlight" [class.active]="multiModules" (click)="toggleMultiModules(true)">Explore</button>
+                <button type="button" class="btn group-btn-highlight" [class.active]="!multiModules" (click)="toggleMultiModules(false)">Focus</button>
             </div>
         </div>
     </div>
+    <div class="top-divider"></div>
     <div class="row">
         <div class="col-2 pl-3 side-nav pr-0">
             <div class="history">
@@ -35,8 +39,8 @@
                     <div class="col-1 d-flex justify-content-center align-items-center">
                         <i class="fa" [ngClass]="data.getHistoryIconClass()"></i>
                     </div>
-                    <div class="col pl-0">
-                        {{ data.getHistoryText() }} 
+                    <div class="col pl-0 item-title">
+                        <span class="title-text" title="{{ data.getHistoryText() }}">{{ data.getHistoryText() }}</span>                
                     </div>
                     <div class="col-1 d-flex justify-content-center align-items-center" (click)="onCloseHistoryItem(i, $event)">
                         <i class="fa fa-close"></i>
@@ -45,65 +49,88 @@
             </div>
             <div class="v-divider"></div> 
         </div>
-        <div class="col v-main pl-0">
-            <div class="h-container">
+        <div class="col-10 v-main pl-0">
+            <div class="disclaimer card" *ngIf="modules.length === 0">
+                <h3>Welcome to Arch<b>AI</b>vist!</h3>
+                <p>While exploring this app, please keep in mind that this is a prototype and may break at any time!</p>
+                <p>We collect fine-grained usage data for a user study conducted as part of the VHH project. More precisely, we employ Google Analytics to collect data on specific predefined events and Microsoft Clarity for capturing user sessions as well as constructing UI heatmaps.</p>
+                <p>If you encounter any issues or want to give us feedback contact us at <a href="mailto:sebastian.hofstaetter@tuwien.ac.at">sebastian.hofstaetter@tuwien.ac.at</a>!</p>
+            </div>
+            <div class="h-container" [class.transition] = "multiTransitioning">
                 <!-- <div class="pad-item pad-item-left"></div> -->
                 <div *ngFor="let data of modules; let i = index" class="item" id="item-{{i}}" appModuleItem
+                [inViewport]="modulesInViewPort[i]"
                 [class.full-page] = "!multiModules"
                 snInViewport
                 (inViewportChange)="onInViewportChange(i, $event)"
                 [inViewportOptions]="{
                     rootMargin: '0px 0px 0px 17%'
                 }">
-                    <div *ngIf="data.type == moduleType.Search" class="d-flex flex-column w-100">
-                        <div class="result-header">
-                            <div class="d-flex justify-content-center">
-                                <div class="justify-content-start">
-                                    <p class="mb-0 mt-2">Results for '{{ modules[i]?.query }}'</p>
-                                    <p *ngIf="hasHits(i)" class="mb-0 text-muted ">{{ modules[i]?.result?.total }} entries found! ({{ modules[i]?.result?.hits?.length }} loaded)</p>
+                    <div class="d-flex flex-column w-100">
+                        <div *ngIf="data.type == moduleType.Search || data.type == moduleType.DocumentSearch" class="d-flex flex-column w-100">
+                            <div class="result-header" [class.stem-filtered]="modules[i].hasStemFilters()">
+                                <div class="d-flex justify-content-center">
+                                    <div class="header-title">
+                                        <p class="mb-0 mt-2 title-text" title="Results for '{{ modules[i]?.queries?.join(' + ') }}'">
+                                            <i (click)="infoClick(data)" class="fa fa-info-circle" title="Learn more about the translation process"></i>
+                                             Results for '{{ modules[i]?.queries?.join(' + ') }}'
+                                             <span *ngIf="data.type == moduleType.DocumentSearch"> in document '{{ $any(data).document.parent_doc }}'</span>
+                                        </p>
+                                        <p *ngIf="hasHits(i)" class="mb-0 text-muted ">{{ modules[i].getLoadedText() }}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                    <app-language-filter
+                                    *ngIf="data.type != moduleType.DocumentSearch"
+                                    [language]="modules[i].language"
+                                    (languageSelected)="onLanguageFilter($event, i)"
+                                    ></app-language-filter>
+                                    <div class="btn-group ml-2 mode-group" role="group" *ngIf="modules.length > 0">
+                                        <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="data.orderBy === ''" (click)="onSort(i, '', 'desc')">
+                                            <i class="fa fa-sort-amount-desc" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="data.orderBy === 'alpha' && data.direction === 'asc'" (click)="onSort(i, 'alpha', 'asc')">
+                                            <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="data.orderBy === 'alpha' && data.direction === 'desc'" (click)="onSort(i, 'alpha', 'desc')">
+                                            <i class="fa fa-sort-alpha-desc" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center" *ngIf="modules[i].hasStemFilters()">
+                                    <app-stem-filter
+                                    [stemFilters]="modules[i].getStemFilters()"
+                                    [language]="modules[i].language"
+                                    (filterRemoved)="onStemFilterRemove($event, modules[i])"
+                                    ></app-stem-filter>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-center align-items-center mt-2">
-                                <app-language-filter
-                                [hasHits]="hasHits(i)"
-                                [moduleLang]="modules[i].language"
-                                (languageSelected)="onLanguageFilter($event, i)"
-                                ></app-language-filter>
-                                <div class="btn-group ml-2 mode-group" role="group" aria-label="Basic outlined example" *ngIf="modules.length > 0">
-                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 0" (click)="sort = 0">
-                                        <i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 1" (click)="sort = 1">
-                                        <i class="fa fa-sort-amount-desc" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 2" (click)="sort = 2">
-                                        <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn group-btn-highlight sort-btn" [class.active]="sort == 3" (click)="sort = 3">
-                                        <i class="fa fa-sort-alpha-desc" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                                
-                            </div>
+                            <app-search-results class="result-body"
+                            (resultItemClicked)="onResultItemClicked($event, i)"
+                            (documentSearchStarted)="onDocumentSearch($event, i)"
+                            [data]="data"
+                            [inViewport]="modulesInViewPort[i]"
+                            (scrolled)="onScroll(i)"></app-search-results>
                         </div>
-                        <app-search-results class="result-body" 
-                        (termsSelected)="onTermsSelected($event, modules[i]?.language!)"
-                        (resultItemClicked)="onResultItemClicked($event, i)"
-                        [data]="data"
-                        [inViewport]="modulesInViewPort[i]"
-                        (scrolled)="onScroll(i)"></app-search-results>
-                    </div>
-                    <div *ngIf="data.type == moduleType.Document" style="width: 100%;">
-                        <app-document-detail class="mt-2"
-                        (termsSelected)="onTermsSelected($event, modules[i]?.language!)"
-                        [data]="$any(data)"
-                        [inViewport]="modulesInViewPort[i]"
-                        ></app-document-detail>
+                        <div *ngIf="data.type == moduleType.Document" style="width: 100%;">
+                            <app-document-detail class="mt-2"
+                            (documentSearchStarted)="onDocumentSearch($event, i)"
+                            [data]="$any(data)"
+                            [inViewport]="modulesInViewPort[i]"
+                            ></app-document-detail>
+                        </div>
                     </div>
                 </div>
                 <!-- <div class="pad-item pad-item-right"></div> -->
             </div>
         </div>
+    </div>
+    <div #tooltipDiv class="tooltip-div">
+        <i title="Start new search with marked section" class="fa fa-search mx-1" (click)="onTooltipSearch()"></i>
+        <i title="Filter current search with marked section" class="fa fa-filter mx-1" (click)="onTooltipFilter()"></i>
+        <i title="Copy marked section to clipboard" class="fa fa-copy mx-1" (click)="onTooltipCopy()"></i>
+        <i *ngIf="relevantBoxSelected" title="Remove marked term from results" class="fa fa-ban mx-1" (click)="onTooltipStemFilter()"></i>
+
     </div>
 </div>
 <router-outlet></router-outlet>

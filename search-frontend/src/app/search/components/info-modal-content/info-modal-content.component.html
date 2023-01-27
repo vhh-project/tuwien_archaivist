@@ -1,0 +1,56 @@
+<div class="modal-header">
+  <div class="header-text">
+    <p>Original query: '{{data.queries.join(' + ')}}'</p>
+    <p>Detected language: 
+      <ng-container *ngFor="let phraseTranslations of translations; let last=last; let i=index;">
+        <span [title]="'Detected language for query: \'' + data.queries[i] + '\''">{{getDetectedLanguage(i)}}</span>
+        <span *ngIf="!last">,&nbsp;</span>
+      </ng-container>
+    </p>
+    <p *ngIf="hasSynonyms()">
+      Found synonyms: 
+      <ng-container *ngFor="let phraseTranslations of translations; let lastQuery=last;">
+      <span *ngFor="let item of phraseTranslations.synonyms; let lastSynonym=last;">
+        <span 
+        [ngbPopover]="popContent" 
+        triggers="manual"
+        placement="bottom"
+        popoverClass="synonym-popover"
+        #p="ngbPopover"
+        (click)="toggleSynonymPop(p, item)"
+        title="Click to show synonyms for this phrase!"
+        class="synonym-mainterm"
+        >{{ item.mainTerm }}</span>
+        <span *ngIf="!lastSynonym || !lastQuery">,&nbsp;</span>
+      </span>
+      </ng-container>
+    </p>
+  </div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  </div>
+  <div class="modal-body">
+    <div class="table-scroll">
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let language of Object.keys(translationMap)">
+              <td>{{ getLang(language) }}</td>
+              <td *ngFor="let term of translationMap[language]">
+                <span [title]="'Stemmed and normalized baseform: ' + stemMap[term]">{{ term }}</span>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #popContent let-synonym="synonym">
+      <div class="grid-container">
+        <div class="grid-item" *ngFor="let term of synonym.terms">
+          {{term}}
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <!-- <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+  </div> -->

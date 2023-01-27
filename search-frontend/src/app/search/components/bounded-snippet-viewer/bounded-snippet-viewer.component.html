@@ -1,0 +1,6 @@
+<div class="bounding-container" #boundingContainer [style.position]="'relative'" (resized)="onResize($event)">
+    <img #docImage class="img-fluid selectAndDragDisable" draggable=false
+    [src]="vespaService.getSnippetURL(snippetName!)" 
+    (load)="onDocImageLoad()"/>
+    <div  [resize]="resize" [innerHtml]="boundingBoxContent | safeHtml" appFitTextPlus></div>
+</div>

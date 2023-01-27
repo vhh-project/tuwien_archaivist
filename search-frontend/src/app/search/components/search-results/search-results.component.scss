@@ -1,0 +1,80 @@
+.tooltip-div {
+    display: none;
+    // width: 250px;
+    // z-index: 1021;
+    background-color: #fff;
+    border: 1px solid #666;
+    padding: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.scroll-viewport {
+    height: calc(98vh - 100px - 100px);
+    &.stem-filtered {
+        height: calc(98vh - 100px - 130px);
+    }
+    width: 100%;
+    scrollbar-width: thin;
+}
+
+:host ::ng-deep cdk-virtual-scroll-viewport .cdk-virtual-scroll-content-wrapper {
+    width: 100%;
+ }
+
+.language-tag {
+    height: 30px;
+    font-size: 1rem;
+    margin-right: 0.25rem;
+    display: inline-block;
+}
+
+.card-title {
+    font-size: 1.25rem;
+}
+
+.h-divider-wrapper {
+    display: flex;
+    justify-content: center;
+    .h-divider{
+        margin-top: 5px;
+        margin-bottom: 5px;
+        height:1px;
+        width:95%;
+        border-top:1px solid lightgray;
+    }
+}
+
+.card-body {
+    padding: 1rem;
+
+    .btn-title {
+        &:hover {
+            color: rgba(243, 154, 39, 0.5);
+        }
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .doc-detail-mid {
+        display: flex;
+        min-width: 0;
+        margin-right: 20px;
+    
+        .doc-title {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            &.switchable:hover {
+                color: rgba(243, 154, 39, 0.5);
+            }
+        }    
+    }
+
+    .doc-page {
+        flex-shrink: 0;
+        font-size: 14px;
+        margin-right: 0.5rem;
+    }
+}

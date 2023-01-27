@@ -1,0 +1,25 @@
+.badge {
+    color: #fff;
+    background-color: rgba(243, 154, 39, 0.7);
+    margin-left: 5px;
+
+    &:hover{
+        background-color: rgba(243, 154, 39, 0.5);
+
+        i {
+            &:hover{
+                color: black;
+            }
+        }
+    }
+    
+    i {
+        margin-left: 2px;
+        cursor: pointer;
+    }
+}
+
+.stem-container {
+    height: 32px;
+    overflow-x: auto;
+}

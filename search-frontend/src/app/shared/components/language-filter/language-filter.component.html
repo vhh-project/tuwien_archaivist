@@ -1,0 +1,8 @@
+<select class="form-select" aria-label="Language selector" (change)="onChange($event)">
+    <option [selected]="language === ''" value="">All languages</option>
+    <option *ngFor="let lang of globals.supportedLanguages; let i = index" 
+    value="{{ globals.supportedLanguages[i] }}"
+    [selected]="language === globals.supportedLanguages[i]">
+        {{ globals.languageNames[i] }}
+    </option>
+</select>
