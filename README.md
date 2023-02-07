@@ -6,6 +6,7 @@
     - [word2word translation API](#word2word-translation-api)
     - [baseline vespa app](#baseline-vespa-app)
     - [vespa API (intermediate service)](#vespa-api-intermediate-service)
+    - [Search frontend](#search-frontend)
 - [Prerequisites](#prerequisites)
 - [Disclaimer](#disclaimer)
 - [Setup](#setup)
